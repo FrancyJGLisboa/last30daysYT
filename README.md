@@ -9,6 +9,9 @@ A YouTube-only sibling of the `last30days` skill. It does **not** reimplement a
 search pipeline — it wraps [yt2md](https://github.com/FrancyJGLisboa/yt2md) for
 transcripts and uses the model as the writer.
 
+**See a real sample:** [`examples/ai-local-models-topic.html`](examples/ai-local-models-topic.html)
+· [PDF](examples/ai-local-models-topic.pdf) — unedited output of `/last30daysYT AI local models`.
+
 ## Install
 
 **Requirements:** [yt2md](https://github.com/FrancyJGLisboa/yt2md) on PATH, a JS

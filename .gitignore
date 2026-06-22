@@ -4,3 +4,5 @@ __pycache__/
 # run outputs (transcripts, digests, reports, PDFs)
 /out/
 *.pdf
+# ...but keep committed sample artifacts
+!examples/*.pdf
