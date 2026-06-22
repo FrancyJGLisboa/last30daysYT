@@ -9,6 +9,42 @@ A YouTube-only sibling of the `last30days` skill. It does **not** reimplement a
 search pipeline — it wraps [yt2md](https://github.com/FrancyJGLisboa/yt2md) for
 transcripts and uses the model as the writer.
 
+## Install
+
+**Requirements:** [yt2md](https://github.com/FrancyJGLisboa/yt2md) on PATH, a JS
+runtime for yt-dlp (`deno`/node/bun), and Chrome/Chromium (or wkhtmltopdf) for the
+PDF step. Only the Claude Code path is verified locally; the others follow each
+platform's published format.
+
+### Claude Code
+
+```
+/plugin marketplace add FrancyJGLisboa/last30daysYT
+/plugin install last30daysYT@last30daysYT
+```
+Restart, then run `/last30daysYT <topic>` (e.g. `/last30daysYT AI local models`,
+`/last30daysYT @veritasium @kurzgesagt`, `/last30daysYT condições climáticas no Sul do Brasil`).
+
+### GitHub Copilot CLI
+
+```
+copilot plugin marketplace add FrancyJGLisboa/last30daysYT
+copilot plugin install last30daysYT@last30daysYT
+```
+
+### Codex
+
+```
+npx skills add FrancyJGLisboa/last30daysYT -g
+```
+(or any [Agent Skills](https://agentskills.io) host)
+
+### Pi agent harness
+
+```
+pi install git:github.com/FrancyJGLisboa/last30daysYT
+```
+
 ## How it works
 
 1. **Fetch** (`scripts/yt_brief.py fetch`) — for a topic, flat-searches a pool,
@@ -36,12 +72,13 @@ transcripts and uses the model as the writer.
 /last30daysYT                                            # standing channels only
 ```
 
-Maintain your standing channels in `config/channels.txt` (one `/videos` URL per
-line). See `SKILL.md` for the full contract.
+Maintain your standing channels in `skills/last30daysYT/config/channels.txt` (one
+`/videos` URL per line). See `skills/last30daysYT/SKILL.md` for the full contract.
 
 ## Direct CLI
 
 ```bash
+cd skills/last30daysYT
 python3 scripts/yt_brief.py fetch "hardware for AI models" --lang en \
   --days 30 --out ./out --cookies-from-browser chrome
 python3 scripts/yt_brief.py render ./out/report.html

@@ -1,0 +1,14 @@
+{
+  "name": "last30daysYT",
+  "version": "0.1.0",
+  "description": "Build a newsletter-ready brief on any topic from the last 30 days of YouTube. Engagement-ranks the best videos, transcribes them via yt2md, and writes a skimmable, educational newsletter (Markdown + HTML with a chart + PDF). Optionally follows a standing list of channels. Works in any language.",
+  "author": {
+    "name": "Francy Lisboa Charuto",
+    "url": "https://github.com/FrancyJGLisboa"
+  },
+  "homepage": "https://github.com/FrancyJGLisboa/last30daysYT",
+  "repository": "https://github.com/FrancyJGLisboa/last30daysYT",
+  "license": "MIT",
+  "keywords": ["youtube", "newsletter", "transcripts", "digest", "research",
+               "topic-monitoring", "yt2md", "last30days"]
+}

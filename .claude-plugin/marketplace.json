@@ -1,0 +1,24 @@
+{
+  "name": "last30daysYT",
+  "owner": {
+    "name": "Francy Lisboa Charuto",
+    "url": "https://github.com/FrancyJGLisboa"
+  },
+  "metadata": {
+    "description": "Marketplace hosting the last30daysYT YouTube newsletter-generator skill."
+  },
+  "plugins": [
+    {
+      "name": "last30daysYT",
+      "description": "Topic-first YouTube newsletter generator: engagement-ranks the best videos on a topic from the last 30 days, transcribes them via yt2md, and writes a skimmable, educational newsletter (Markdown + HTML with a chart + PDF). Optionally follows a standing channel list. Any language.",
+      "version": "0.1.0",
+      "author": {
+        "name": "Francy Lisboa Charuto",
+        "url": "https://github.com/FrancyJGLisboa"
+      },
+      "source": "./",
+      "category": "productivity",
+      "homepage": "https://github.com/FrancyJGLisboa/last30daysYT"
+    }
+  ]
+}
