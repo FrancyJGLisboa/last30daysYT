@@ -1,0 +1,11 @@
+# last30daysYT — channels you follow.
+# One YouTube channel /videos URL per line. Lines starting with # are ignored.
+# Find a channel's URL: open the channel, click "Videos", copy the address bar.
+#
+# Examples (uncomment / replace with your own):
+# https://www.youtube.com/@veritasium/videos
+# https://www.youtube.com/@AgWeb/videos
+# https://www.youtube.com/@Bloomberg/videos
+#
+# Playlist URLs work too:
+# https://www.youtube.com/playlist?list=PLxxxxxxxx
