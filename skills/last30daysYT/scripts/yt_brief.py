@@ -78,6 +78,18 @@ def rank_topic(topic: str, pool: int, want: int, min_dur: int,
     return [(vid, vc, title) for vc, vid, title in cands[:want]]
 
 
+def _velocity(views: int | None, uploaded: str) -> float:
+    """views per day since upload — engagement that accounts for how long a
+    video has had to accrue it. 0.0 when views or the date are unknown."""
+    if not views:
+        return 0.0
+    try:
+        age = (date.today() - date.fromisoformat(uploaded)).days
+    except ValueError:
+        return 0.0
+    return views / max(age, 1)
+
+
 def _read_channels(path: Path) -> list[str]:
     """Channel/playlist URLs from a channels.txt (# = comment, blanks ignored)."""
     if not path.is_file():
@@ -182,8 +194,21 @@ def cmd_fetch(args) -> int:
         if re.fullmatch(r"\d{4}-\d{2}-\d{2}", meta["uploaded"]):
             by_day[meta["uploaded"]] = by_day.get(meta["uploaded"], 0) + 1
 
-    # highest-engagement first (videos with no known view count sort last)
-    videos.sort(key=lambda v: (v["views"] is None, -(v["views"] or 0)))
+    # Rank for featuring/ordering. velocity (views per day since upload) by
+    # default: a fresh video shouldn't sit below an older one that simply had
+    # more time to accrue views — the bug raw-view ranking causes in a recency
+    # product (it also forced the example's 30d window out to 90d).
+    # ponytail: the candidate POOL upstream is still view-only — yt-dlp's flat
+    # search exposes no upload date, so velocity is unknowable before fetch.
+    # Upgrade path: a per-video date probe (one fetch per candidate) would let
+    # the pool itself be velocity-ranked; not worth the 429 risk for the
+    # featured-set win this re-rank already gives.
+    for v in videos:
+        v["velocity"] = _velocity(v["views"], v["uploaded"])
+    if args.rank_by == "velocity":
+        videos.sort(key=lambda v: (v["views"] is None, -v["velocity"]))
+    else:
+        videos.sort(key=lambda v: (v["views"] is None, -(v["views"] or 0)))
 
     stats = {
         "since": since, "until": date.today().isoformat(), "days": args.days,
@@ -208,6 +233,17 @@ def cmd_fetch(args) -> int:
           f"({since}..{stats['until']}), {stats['with_captions']} with captions")
     print(f"digest: {out / 'digest.md'}")
     print(f"stats:  {out / 'stats.json'}")
+
+    # Degraded-run gate: a newsletter can't be written from zero transcripts, so
+    # don't exit 0 and let the writer ship a hollow page. Mirrors yt2md's own
+    # empty-run contract (exit 2).
+    if not videos or stats["with_captions"] == 0:
+        why = ("no videos matched" if not videos
+               else f"{len(videos)} videos but 0 had captions")
+        print(f"\nWARNING: degraded fetch — {why}. Not enough to write a "
+              f"newsletter; check --lang matches the topic's language, widen "
+              f"--days, or raise --rank-pool.", file=sys.stderr)
+        return 2
     return 0
 
 
@@ -236,6 +272,13 @@ def _html_to_pdf(html_path):
     import time
     pdf = os.path.splitext(html_path)[0] + ".pdf"
     src = "file://" + os.path.abspath(html_path)
+    # Remove any stale PDF first: the Chrome poll loop below detects "done" by
+    # size-stability, and a leftover file makes it read as stable instantly —
+    # returning success while the OLD pdf survives unchanged.
+    try:
+        os.remove(pdf)
+    except OSError:
+        pass
     try:
         if (chrome := _find_chrome()):
             # Chrome writes the PDF then frequently does NOT exit, so launch
@@ -327,6 +370,12 @@ def cmd_selfcheck(_args) -> int:
 
     since = (date.today() - timedelta(days=30)).isoformat()
     assert re.fullmatch(r"\d{4}-\d{2}-\d{2}", since), since
+
+    # velocity: a fresh modest-view video must outrank an old high-view one.
+    old = date.fromisoformat(since)  # 30 days ago
+    fresh = (date.today() - timedelta(days=2)).isoformat()
+    assert _velocity(100_000, old.isoformat()) < _velocity(20_000, fresh), "velocity ranking broken"
+    assert _velocity(None, fresh) == 0.0 and _velocity(500, "garbage") == 0.0, "velocity guards broken"
     print("selfcheck ok")
     return 0
 
@@ -349,6 +398,8 @@ def main(argv=None) -> int:
                    help="topic: candidate pool size to rank by views (default: 40)")
     f.add_argument("--min-duration", type=int, default=90,
                    help="topic: drop videos shorter than N seconds, i.e. Shorts (default: 90)")
+    f.add_argument("--rank-by", choices=("velocity", "views"), default="velocity",
+                   help="featured-video ordering: velocity=views/day (default), or raw views")
     f.add_argument("--per-channel-limit", type=int, default=40,
                    help="cap each channel to its N newest videos (default: 40)")
     f.add_argument("--lang", default="en")

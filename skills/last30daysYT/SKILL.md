@@ -61,10 +61,13 @@ Split the args into channels and a topic:
    - **Channels** are pulled chronologically (newest N per channel).
    - **A topic is engagement pre-ranked**, not taken in raw search order: the
      script flat-searches a pool (`--rank-pool`, default 40), drops Shorts
-     (`--min-duration`, default 90s) and live streams, sorts by view count, and
-     transcribes the top `--search-limit` (default 15). Each topic video's view
-     count lands in `stats.json` (`videos[].views`); videos are sorted
-     highest-engagement first.
+     (`--min-duration`, default 90s) and live streams, picks the top
+     `--search-limit` (default 15) candidates by view count, and transcribes
+     them. After fetch it **re-ranks the survivors by velocity (views/day since
+     upload)** for featuring/ordering — `--rank-by velocity` (default) vs
+     `views`. Velocity is the right default in a recency product: raw views
+     bury fresh videos under older ones that simply had longer to accrue.
+     `stats.json` carries each video's `views` and `velocity`.
    - Each channel is capped to its **40 newest** videos (`--per-channel-limit`,
      newest-first) before the date check — this keeps runs fast. Raise it only
      for channels that post more than ~40 videos in the window.
@@ -84,6 +87,17 @@ Split the args into channels and a topic:
    transcript where every paragraph is `**[MM:SS](https://youtu.be/ID?t=SEC)**`
    — those timestamped links are your citations).
 
+2b. **Corroborate the top claims (depth pass — do not skip).** A newsletter that
+   only relays what YouTubers *said* is a shallow brief. Before writing, take the
+   3–5 biggest claims and run **one WebSearch each** against a source outside the
+   videos (release notes, model card, a benchmark, the vendor's own docs).
+   Record, per claim, whether the outside source **confirms**, is **single
+   source** (only the video says it — opinions/framings/anecdotes often are), or
+   shows the video **overstated** it. This pass routinely *sharpens* the story —
+   e.g. "beats every model" becomes "wins benchmark A, loses B, at 1/6 the cost,"
+   which is exactly the depth the reader wants. No new dependency — `WebSearch`
+   is enough; only reach for native arXiv/HN/GitHub feeds if it falls short.
+
 3. **Write the newsletter.** Produce `report.html` in `--out` — written in the
    topic's language. This is a NEWSLETTER, not a report: the reader should want
    to finish it and come away having learned something. Structure:
@@ -92,11 +106,25 @@ Split the args into channels and a topic:
    - **Sections by theme** (not by video). Each: a bolded claim, a plain-language
      explanation that actually teaches the idea (define jargon, give the number,
      say why it matters), and the citation. Lead with the point, not the source.
+   - **Confidence tag on every headline claim**, inline, right where the claim
+     is — `confirmed` / `single source` / `overstated` — each linking the
+     outside source where one exists. Uncertainty travels WITH the claim; never
+     pool all the hedging into "on the radar" at the end. Add a one-line legend.
+   - **≥1 actionable table** the reader could act on, mined from the transcripts
+     + corroboration (e.g. model → quant → memory → tokens/sec → verdict). If the
+     material genuinely can't support one, say so explicitly.
    - **Worth watching** — 2–4 standout videos with one line each on why + views.
    - **On the radar** — what to watch next month.
    Self-contained HTML: inline CSS, clean editorial layout, ≥1 chart from
-   `stats.json` (Chart.js via CDN — e.g. videos-per-day or per-channel). Satisfy
-   every success check below.
+   `stats.json` (e.g. views/velocity per video). Load Chart.js **pinned with an
+   SRI hash**, never a floating tag — a floating `@4` lets the CDN serve
+   arbitrary unverified code into the reader's browser:
+   ```html
+   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.0/dist/chart.umd.min.js"
+     integrity="sha384-XcdcwHqIPULERb2yDEM4R0XaQKU3YnDsrTmjACBZyfdVVqjh6xQ4/DCMd7XLcA6Y"
+     crossorigin="anonymous"></script>
+   ```
+   Satisfy every success check below.
 
 4. **Render + open.**
    ```
@@ -119,6 +147,15 @@ Split the args into channels and a topic:
    list what you dropped in one line. Show each featured video's view count.
 7. Opens as HTML with ≥1 working chart, plus a non-empty `report.pdf`.
 8. Written in the topic's language (a pt topic → a Portuguese newsletter).
+9. **Depth, not shallow** — every headline claim carries an inline confidence
+   tag (`confirmed`/`single source`/`overstated`), ≥1 tag is corroborated by a
+   non-YouTube link, uncertainty appears in the body (not only at the end), and
+   there is ≥1 actionable table. Verify mechanically:
+   ```
+   python3 scripts/eval_depth.py /tmp/last30daysYT/report.html
+   ```
+   It must exit 0 (all mechanical checks pass). D6 (novelty — does a
+   topic-follower learn ≥3 new things?) is your own judgement, not scriptable.
 
 ## Report-quality rules
 
@@ -134,10 +171,11 @@ Split the args into channels and a topic:
 - The topic is a **global** YouTube search layered on top of your channels (it
   augments, it does not filter within channels — yt2md can't search inside a
   channel).
-- Topic ranking is by **view count**, which skews toward older videos, so a
-  tight date window can leave few survivors (the script ranks the pool by views,
-  then date-filters). If too few come back, raise `--rank-pool` (e.g. 80) or
-  widen `--days`. Channels are the reliable spine; topic is the engagement layer.
+- Topic **candidate selection** is by view count (yt-dlp's flat search exposes
+  no upload date, so velocity can't be known pre-fetch); featuring/ordering is
+  then **velocity-ranked** post-fetch. A tight date window can still leave few
+  survivors — if too few come back, raise `--rank-pool` (e.g. 80) or widen
+  `--days`. Channels are the reliable spine; topic is the engagement layer.
 - Maintain your channel list by editing `config/channels.txt` (one `/videos`
   URL per line, `#` for comments).
 - `python3 scripts/yt_brief.py selfcheck` runs the parser/date self-test.
