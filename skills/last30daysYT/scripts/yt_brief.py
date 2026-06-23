@@ -233,6 +233,17 @@ def cmd_fetch(args) -> int:
           f"({since}..{stats['until']}), {stats['with_captions']} with captions")
     print(f"digest: {out / 'digest.md'}")
     print(f"stats:  {out / 'stats.json'}")
+
+    # Degraded-run gate: a newsletter can't be written from zero transcripts, so
+    # don't exit 0 and let the writer ship a hollow page. Mirrors yt2md's own
+    # empty-run contract (exit 2).
+    if not videos or stats["with_captions"] == 0:
+        why = ("no videos matched" if not videos
+               else f"{len(videos)} videos but 0 had captions")
+        print(f"\nWARNING: degraded fetch — {why}. Not enough to write a "
+              f"newsletter; check --lang matches the topic's language, widen "
+              f"--days, or raise --rank-pool.", file=sys.stderr)
+        return 2
     return 0
 
 
