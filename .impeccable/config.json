@@ -1,0 +1,12 @@
+{
+  "detector": {
+    "ignoreRules": [
+      "hero-eyebrow-chip",
+      "numbered-section-markers",
+      "all-caps-body",
+      "em-dash-overuse"
+    ],
+    "ignoreFiles": [],
+    "ignoreValues": []
+  }
+}

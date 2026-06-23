@@ -159,6 +159,14 @@ Split the args into channels and a topic:
    ```
    It must exit 0 (all mechanical checks pass). D6 (novelty — does a
    topic-follower learn ≥3 new things?) is your own judgement, not scriptable.
+10. **Design, not slop** — the visual contract holds. Run the design gate
+   (Impeccable's deterministic 44-rule detector, the visual twin of the depth
+   eval; honors the documented suppressions in `.impeccable/config.json`):
+   ```
+   sh scripts/design_eval.sh /tmp/timestamped/report.html
+   ```
+   It must exit 0. Needs `npx` (Node). Keep em-dashes sparse so the editorial
+   tolerance isn't abused (DESIGN.md §9).
 
 ## Report-quality rules
 

@@ -22,7 +22,7 @@
   p { margin:.55rem 0; }
   a { color:#0b50a0; text-decoration:none; border-bottom:1px solid #b9cde6; }
   a:hover { border-color:#0b50a0; }
-  .tldr { background:#fff; border:1px solid var(--line); border-left:4px solid var(--accent);
+  .tldr { background:#fff; border:1px solid var(--line);
           padding:1rem 1.2rem; margin:1.2rem 0; }
   .tldr ul { margin:.3rem 0 0; padding-left:1.1rem; }
   .tldr li { margin:.4rem 0; font-size:.97rem; }
@@ -30,7 +30,7 @@
                color:#3a3a3a; font-style:italic; }
   .why { font:12px/1.5 -apple-system,Segoe UI,sans-serif; color:var(--muted); }
   .chartwrap { background:#fff; border:1px solid var(--line); padding:1rem 1.2rem 1.4rem; margin:1.4rem 0; }
-  .chartwrap h4 { font:600 12px/1 -apple-system,Segoe UI,sans-serif; letter-spacing:.08em;
+  .chartwrap .chartlabel { font:600 12px/1 -apple-system,Segoe UI,sans-serif; letter-spacing:.08em;
                   text-transform:uppercase; color:var(--muted); margin:0 0 .6rem; }
   .pick { font:13px/1.6 -apple-system,Segoe UI,sans-serif; }
   .pick li { margin:.5rem 0; }
@@ -82,7 +82,7 @@ Each claim is tagged for how far we could verify it beyond the video:
 </div>
 
 <div class="chartwrap">
-  <h4>Engagement — views per featured video</h4>
+  <p class="chartlabel">Engagement — views per featured video</p>
   <canvas id="views" height="170"></canvas>
 </div>
 
