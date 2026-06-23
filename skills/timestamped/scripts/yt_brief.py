@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""last30daysYT orchestrator — thin wrapper around the yt2md CLI.
+"""Timestamped orchestrator — thin wrapper around the yt2md CLI.
 
 Two subcommands:
   fetch   pull last-N-days transcripts for a channel list (+ optional topic),
@@ -406,7 +406,7 @@ def main(argv=None) -> int:
     f.add_argument("--sleep", type=float, default=3.0)
     f.add_argument("--cookies-from-browser", default=None, metavar="BROWSER",
                    help="load cookies (chrome/safari/firefox) to dodge 429 rate limits")
-    f.add_argument("--out", default="/tmp/last30daysYT")
+    f.add_argument("--out", default="/tmp/timestamped")
     f.set_defaults(func=cmd_fetch)
 
     r = sub.add_parser("render", help="report.html -> sibling PDF, then open")

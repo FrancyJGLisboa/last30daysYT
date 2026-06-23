@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Depth eval for a last30daysYT newsletter — the loss function as a script.
+"""Depth eval for a Timestamped newsletter — the loss function as a script.
 
 Scores a rendered newsletter HTML against the binary "depth, not shallow"
 checks. Mechanical checks gate (exit 1 on any fail); D6 (novelty) is a

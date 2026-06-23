@@ -1,16 +1,20 @@
-# last30daysYT
+# Timestamped
+
+> *the last 30 days of any topic on YouTube — in depth, cited to the second*
 
 A topic-first **YouTube newsletter generator** for Claude Code. Name a topic and
-it engagement-ranks the best videos from the last 30 days, transcribes them, and
-writes a newsletter-ready brief you'll actually finish and learn from — Markdown,
-HTML (with a chart), and PDF. Optionally follow a standing list of channels too.
+it velocity-ranks the best videos from the last 30 days, transcribes them, and
+writes a brief you'll actually finish — where **every claim is cited to the exact
+second** and the big claims are **corroborated** against an outside source.
+Markdown, HTML (with a chart), and PDF. Optionally follow a standing list of
+channels too.
 
 A YouTube-only sibling of the `last30days` skill. It does **not** reimplement a
 search pipeline — it wraps [yt2md](https://github.com/FrancyJGLisboa/yt2md) for
 transcripts and uses the model as the writer.
 
 **See a real sample:** [`examples/ai-local-models-topic.html`](examples/ai-local-models-topic.html)
-· [PDF](examples/ai-local-models-topic.pdf) — unedited output of `/last30daysYT AI local models`.
+· [PDF](examples/ai-local-models-topic.pdf) — unedited output of `/timestamped AI local models`.
 
 ## Install
 
@@ -23,16 +27,16 @@ platform's published format.
 
 ```
 /plugin marketplace add FrancyJGLisboa/last30daysYT
-/plugin install last30daysYT@last30daysYT
+/plugin install timestamped@timestamped
 ```
-Restart, then run `/last30daysYT <topic>` (e.g. `/last30daysYT AI local models`,
-`/last30daysYT @veritasium @kurzgesagt`, `/last30daysYT condições climáticas no Sul do Brasil`).
+Restart, then run `/timestamped <topic>` (e.g. `/timestamped AI local models`,
+`/timestamped @veritasium @kurzgesagt`, `/timestamped condições climáticas no Sul do Brasil`).
 
 ### GitHub Copilot CLI
 
 ```
 copilot plugin marketplace add FrancyJGLisboa/last30daysYT
-copilot plugin install last30daysYT@last30daysYT
+copilot plugin install timestamped@timestamped
 ```
 
 ### Codex
@@ -69,19 +73,19 @@ pi install git:github.com/FrancyJGLisboa/last30daysYT
 ## Usage (as a Claude Code skill)
 
 ```
-/last30daysYT AI local models
-/last30daysYT @veritasium @kurzgesagt
-/last30daysYT condições climáticas no Sul do Brasil     # any language
-/last30daysYT                                            # standing channels only
+/timestamped AI local models
+/timestamped @veritasium @kurzgesagt
+/timestamped condições climáticas no Sul do Brasil     # any language
+/timestamped                                            # standing channels only
 ```
 
-Maintain your standing channels in `skills/last30daysYT/config/channels.txt` (one
-`/videos` URL per line). See `skills/last30daysYT/SKILL.md` for the full contract.
+Maintain your standing channels in `skills/timestamped/config/channels.txt` (one
+`/videos` URL per line). See `skills/timestamped/SKILL.md` for the full contract.
 
 ## Direct CLI
 
 ```bash
-cd skills/last30daysYT
+cd skills/timestamped
 python3 scripts/yt_brief.py fetch "hardware for AI models" --lang en \
   --days 30 --out ./out --cookies-from-browser chrome
 python3 scripts/yt_brief.py render ./out/report.html
