@@ -119,15 +119,9 @@ Split the args into channels and a topic:
    - **Worth watching** — 2–4 standout videos with one line each on why + views.
    - **On the radar** — what to watch next month.
    Self-contained HTML: inline CSS, clean editorial layout, ≥1 chart from
-   `stats.json` (e.g. views/velocity per video). Load Chart.js **pinned with an
-   SRI hash**, never a floating tag — a floating `@4` lets the CDN serve
-   arbitrary unverified code into the reader's browser:
-   ```html
-   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.0/dist/chart.umd.min.js"
-     integrity="sha384-XcdcwHqIPULERb2yDEM4R0XaQKU3YnDsrTmjACBZyfdVVqjh6xQ4/DCMd7XLcA6Y"
-     crossorigin="anonymous"></script>
-   ```
-   Satisfy every success check below.
+   `stats.json` (e.g. views/velocity per video) rendered as **inline CSS bars —
+   no Chart.js, no CDN, no `<script>`** (see DESIGN.md §8; a CDN canvas renders
+   blank in the headless-Chrome PDF). Satisfy every success check below.
 
 4. **Render + open.**
    ```

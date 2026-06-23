@@ -64,8 +64,8 @@ Component colors (do not introduce others):
 - **Theme section:** H2 theme label → H3 claim (+ chip) → plain-language teach →
   blockquote (verbatim, attributed, pill) → `why it matters` line.
 - **Runs table** (`table.runs`): the actionable decision table; numeric cells mono.
-- **Engagement chart:** one Chart.js horizontal bar, accent fill, velocity/views.
-  Never decorative; one per newsletter.
+- **Engagement chart:** one inline-CSS horizontal bar chart (§8), accent fill,
+  velocity/views. Never decorative; one per newsletter.
 - **Worth watching / On the radar / Footer:** sans, muted, compact.
 
 ## 6. Layout & rhythm
@@ -81,9 +81,13 @@ H2, ~1.4rem above H3. Cards and tables: `1px var(--line)` border, no shadows.
 
 ## 8. Chart
 
-Chart.js **pinned + SRI** (never a floating `@4`):
-`chart.js@4.5.0/dist/chart.umd.min.js` with its `integrity` hash + `crossorigin`.
-If the version bumps, recompute the hash.
+**Inline CSS bars, no JavaScript, no CDN.** One engagement chart per newsletter —
+horizontal bars built from plain HTML/CSS (`.bars`/`.bar` in the sample), widths
+as a percentage of the max. This renders identically in HTML and PDF and needs
+no network — a Chart.js-from-CDN canvas renders blank in headless-Chrome PDF
+(captured before the script loads), and dropping the external script also
+removes the supply-chain surface entirely (no pin/SRI to maintain). Accent fill,
+tabular-numeric value labels, one chart only, never decorative.
 
 ## 9. Slop guards (pre-figures the Impeccable detector — never do these)
 

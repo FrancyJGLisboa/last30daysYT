@@ -3,9 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Timestamped — AI local models</title>
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.0/dist/chart.umd.min.js" integrity="sha384-XcdcwHqIPULERb2yDEM4R0XaQKU3YnDsrTmjACBZyfdVVqjh6xQ4/DCMd7XLcA6Y" crossorigin="anonymous"></script>
-<style>
+<title>Timestamped — AI local models</title><style>
   :root { --ink:#15191e; --muted:#6b7280; --line:#e6e8eb; --accent:#0a7d4d; --bg:#fbfcfb; }
   * { box-sizing:border-box; }
   body { font:17px/1.65 Georgia,"Times New Roman",serif; color:var(--ink); background:var(--bg);
@@ -30,6 +28,13 @@
                color:#3a3a3a; font-style:italic; }
   .why { font:12px/1.5 -apple-system,Segoe UI,sans-serif; color:var(--muted); }
   .chartwrap { background:#fff; border:1px solid var(--line); padding:1rem 1.2rem 1.4rem; margin:1.4rem 0; }
+  .bars { display:flex; flex-direction:column; gap:.5rem; margin-top:.5rem; }
+  .bar { display:grid; grid-template-columns:130px 1fr 46px; align-items:center; gap:.6rem;
+         font:12.5px/1.3 -apple-system,Segoe UI,sans-serif; }
+  .bar .lbl { color:var(--ink); text-align:right; }
+  .bar .track { background:#eef2f0; border-radius:3px; height:16px; }
+  .bar .fill { display:block; height:100%; background:var(--accent); border-radius:3px; }
+  .bar .val { font-variant-numeric:tabular-nums; color:var(--muted); }
   .chartwrap .chartlabel { font:600 12px/1 -apple-system,Segoe UI,sans-serif; letter-spacing:.08em;
                   text-transform:uppercase; color:var(--muted); margin:0 0 .6rem; }
   .pick { font:13px/1.6 -apple-system,Segoe UI,sans-serif; }
@@ -83,7 +88,13 @@ Each claim is tagged for how far we could verify it beyond the video:
 
 <div class="chartwrap">
   <p class="chartlabel">Engagement — views per featured video</p>
-  <canvas id="views" height="170"></canvas>
+  <div class="bars">
+    <div class="bar"><span class="lbl">Web Dev Simplified</span><span class="track"><span class="fill" style="width:100%"></span></span><span class="val">552k</span></div>
+    <div class="bar"><span class="lbl">AI Search</span><span class="track"><span class="fill" style="width:73.9%"></span></span><span class="val">407k</span></div>
+    <div class="bar"><span class="lbl">Apple Dev</span><span class="track"><span class="fill" style="width:70.5%"></span></span><span class="val">389k</span></div>
+    <div class="bar"><span class="lbl">Zero to MVP</span><span class="track"><span class="fill" style="width:61.2%"></span></span><span class="val">337k</span></div>
+    <div class="bar"><span class="lbl">Tina Huang</span><span class="track"><span class="fill" style="width:58.3%"></span></span><span class="val">322k</span></div>
+  </div>
 </div>
 
 <h2>Theme 1 — The models got good enough</h2>
@@ -140,19 +151,5 @@ Each claim is tagged for how far we could verify it beyond the video:
   Built by <strong>Timestamped</strong> from YouTube transcripts (via yt2md). Topic "AI local models", top 5 by velocity (views/day), last 30 days (extended to a 90-day window to fill the set). Every claim links to the exact moment in the source video; headline claims were then checked against an outside source and tagged <span class="conf ok">confirmed</span> / <span class="conf one">single source</span> / <span class="conf warn">overstated</span>. Engagement is a prefilter — substance was judged from the transcripts and the corroboration pass.
 </footer>
 
-<script>
-new Chart(document.getElementById('views'), {
-  type: 'bar',
-  data: {
-    labels: ['Web Dev Simplified','AI Search','Apple Dev','Zero to MVP','Tina Huang'],
-    datasets: [{ label:'views', data:[551692,407477,389118,337431,321695], backgroundColor:'#0a7d4d' }]
-  },
-  options: {
-    indexAxis:'y',
-    plugins:{ legend:{display:false} },
-    scales:{ x:{ beginAtZero:true, ticks:{ callback:v => (v/1000)+'k' } } }
-  }
-});
-</script>
 </body>
 </html>
