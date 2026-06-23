@@ -103,16 +103,21 @@ Split the args into channels and a topic:
    topic's language. **Follow [DESIGN.md](DESIGN.md)** — the visual contract
    (tokens, the timestamp-pill + confidence-chip signature, type scale, print
    rules, slop guards). This is a NEWSLETTER, not a report: the reader should
-   want to finish it and come away having learned something. Structure:
-   - **Headline** + a one-line hook (what changed this month, why care now).
-   - **TL;DR** — 3–5 bullets, the takeaways someone could repeat at dinner.
-   - **Sections by theme** (not by video). Each: a bolded claim, a plain-language
-     explanation that actually teaches the idea (define jargon, give the number,
-     say why it matters), and the citation. Lead with the point, not the source.
-   - **Confidence tag on every headline claim**, inline, right where the claim
-     is — `confirmed` / `single source` / `overstated` — each linking the
-     outside source where one exists. Uncertainty travels WITH the claim; never
-     pool all the hedging into "on the radar" at the end. Add a one-line legend.
+   want to finish it. **Built for the skim** — hook the 5-second reader, reward
+   the digger below (inverted pyramid). Structure, top to bottom:
+   - **Punchy headline** (one concrete line, not a clause-stuffed sentence) +
+     a **one-line hero takeaway** (`.hero-take`): the single biggest "so what",
+     bold, before any meta. This is the 5-second test.
+   - **"In 30 seconds"** — 3–5 **one-line** bullets (≤120 chars each, the whole
+     block skimmable in under 10s). Each: the takeaway, its `[MM:SS]` pill, then
+     the confidence chip as a faint **end-of-line** tag (never mid-sentence).
+   - **Meta line + chip legend go BELOW the bullets**, not above — value first,
+     friction second.
+   - **Sections by theme** (not by video). Each opens with a **bold claim lead**;
+     paragraphs stay **≤3 sentences** (no walls of text); teach the idea (define
+     jargon, give the number, say why it matters) with the citation. The full
+     `confirmed`/`single source`/`overstated` treatment lives here, on each claim
+     — uncertainty travels WITH the claim, never pooled only in "on the radar".
    - **≥1 actionable table** the reader could act on, mined from the transcripts
      + corroboration (e.g. model → quant → memory → tokens/sec → verdict). If the
      material genuinely can't support one, say so explicitly.
@@ -144,10 +149,11 @@ Split the args into channels and a topic:
    list what you dropped in one line. Show each featured video's view count.
 7. Opens as HTML with ≥1 working chart, plus a non-empty `report.pdf`.
 8. Written in the topic's language (a pt topic → a Portuguese newsletter).
-9. **Depth, not shallow** — every headline claim carries an inline confidence
-   tag (`confirmed`/`single source`/`overstated`), ≥1 tag is corroborated by a
-   non-YouTube link, uncertainty appears in the body (not only at the end), and
-   there is ≥1 actionable table. Verify mechanically:
+9. **Depth + scannability** — every headline claim carries a confidence tag
+   (`confirmed`/`single source`/`overstated`), ≥1 tag is corroborated by a
+   non-YouTube link, uncertainty appears in the body, there is ≥1 actionable
+   table (D1–D5), AND it's built for the skim: a hero takeaway before the meta,
+   one-line TL;DR bullets, no wall-of-text paragraph (S1–S3). Verify mechanically:
    ```
    python3 scripts/eval_depth.py /tmp/timestamped/report.html
    ```

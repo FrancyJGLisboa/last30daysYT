@@ -58,9 +58,16 @@ Component colors (do not introduce others):
 
 ## 5. Components
 
-- **Masthead:** kicker `TIMESTAMPED · topic brief` → H1 headline → italic hook →
-  meta line (`topic · N videos · window · velocity-ranked`) → one-line chip legend.
-- **TL;DR card:** left accent border, 3–5 bullets, each a takeaway + pill (+ chip).
+Built for the skim (inverted pyramid): hook the 5-second reader at the top,
+reward the digger below.
+
+- **Masthead:** kicker `TIMESTAMPED · topic brief` → **punchy one-line H1** →
+  **hero takeaway** (`.hero-take`, the single biggest "so what", bold, one line).
+  No clause-stuffed hook, no meta yet.
+- **"In 30 seconds" card:** 3–5 **one-line** bullets (≤120 chars), each = takeaway
+  + `[MM:SS]` pill + confidence chip as a faint **end-of-line** tag (`.conf.end`),
+  never mid-sentence. The whole block skims in under 10 seconds.
+- **Meta line + chip legend** sit **below** the card — value first, friction second.
 - **Theme section:** H2 theme label → H3 claim (+ chip) → plain-language teach →
   blockquote (verbatim, attributed, pill) → `why it matters` line.
 - **Runs table** (`table.runs`): the actionable decision table; numeric cells mono.
@@ -105,7 +112,9 @@ tabular-numeric value labels, one chart only, never decorative.
 
 Two deterministic gates run on every generated newsletter (the verify step):
 
-- **Content depth** — `scripts/eval_depth.py report.html` (the D1–D6 checks).
+- **Content depth + scannability** — `scripts/eval_depth.py report.html`: the
+  D1–D6 depth checks plus S1–S3 (hero takeaway before the meta, one-line TL;DR
+  bullets ≤120 chars, no paragraph over 420 chars).
 - **Design slop** — `scripts/design_eval.sh report.html`, which runs
   [Impeccable](https://impeccable.style)'s no-LLM 44-rule detector
   (`npx impeccable detect`). Exit 0 = clean.
