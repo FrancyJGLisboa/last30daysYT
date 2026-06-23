@@ -1,26 +1,27 @@
 ---
-name: last30daysYT
-description: Build a newsletter-ready brief on any topic from the last 30 days of YouTube — engaging, skimmable, and genuinely educational. Give it a topic ("AI local models", "hardware for AI", "condições climáticas no Sul do Brasil") and it engagement-ranks the best videos, transcribes them, and writes a newsletter the reader will actually finish and learn from. Optionally follow a standing list of channels too. Works in any language (set from the topic). Invoke as /last30daysYT {topic} [channels]. Wraps the yt2md CLI for transcripts; the model writes the newsletter (Markdown + HTML with a chart + PDF). Use when the user wants to keep up with a topic, build a recurring newsletter, get a YouTube digest, or monitor channels/topics over the last N days.
+name: timestamped
+description: Timestamped — keep up with any topic in depth from the last 30 days of YouTube. Give it a topic ("AI local models", "hardware for AI", "condições climáticas no Sul do Brasil") and it velocity-ranks the best videos, transcribes them, and writes a newsletter where every claim is cited to the exact second and the big claims are corroborated against an outside source. Optionally follow a standing list of channels too. Works in any language (set from the topic). Invoke as /timestamped {topic} [channels]. Wraps the yt2md CLI for transcripts; the model writes the newsletter (Markdown + HTML with a chart + PDF), following DESIGN.md. Use when the user wants to keep up with a topic, build a recurring newsletter, get a YouTube digest, or monitor channels/topics over the last N days.
 ---
 
-# last30daysYT
+# Timestamped
 
 A topic-first YouTube **newsletter generator**. The reader names a topic; this
 turns the last 30 days of the best videos on it into a brief they'll actually
-finish and learn from. Following standing channels is an optional extra source.
+finish and learn from — every claim cited to the second, the big ones
+corroborated. Following standing channels is an optional extra source.
 It wraps `~/yt2md` (CLI at `~/.local/bin/yt2md`) for transcripts and uses you,
 the model, as the writer.
 
 ## Invocation
 
-Everything after `/last30daysYT` is free text — channel names/handles, a topic,
+Everything after `/timestamped` is free text — channel names/handles, a topic,
 or both. You parse it (see next section). Examples:
 
-- `/last30daysYT AI safety` — standing channels (`config/channels.txt`) + a
+- `/timestamped AI safety` — standing channels (`config/channels.txt`) + a
   global YouTube search for "AI safety", last 30 days.
-- `/last30daysYT @veritasium @kurzgesagt` — just those two channels, no topic.
-- `/last30daysYT @TwoMinutePapers diffusion models` — that channel + a topic.
-- `/last30daysYT` (nothing) — everything the standing channels posted, last 30 days.
+- `/timestamped @veritasium @kurzgesagt` — just those two channels, no topic.
+- `/timestamped @TwoMinutePapers diffusion models` — that channel + a topic.
+- `/timestamped` (nothing) — everything the standing channels posted, last 30 days.
 
 ## Parse the user's args (do this first)
 
@@ -51,7 +52,7 @@ Split the args into channels and a topic:
    ```
    python3 scripts/yt_brief.py fetch "{topic}" --lang en \
      --channel https://www.youtube.com/@veritasium/videos \
-     --days 30 --out /tmp/last30daysYT
+     --days 30 --out /tmp/timestamped
    ```
    Pass `""` for the topic when channels-only. Drop all `--channel` flags to use
    the standing `config/channels.txt`. It writes `digest.md` and `stats.json`.
@@ -99,8 +100,10 @@ Split the args into channels and a topic:
    is enough; only reach for native arXiv/HN/GitHub feeds if it falls short.
 
 3. **Write the newsletter.** Produce `report.html` in `--out` — written in the
-   topic's language. This is a NEWSLETTER, not a report: the reader should want
-   to finish it and come away having learned something. Structure:
+   topic's language. **Follow [DESIGN.md](DESIGN.md)** — the visual contract
+   (tokens, the timestamp-pill + confidence-chip signature, type scale, print
+   rules, slop guards). This is a NEWSLETTER, not a report: the reader should
+   want to finish it and come away having learned something. Structure:
    - **Headline** + a one-line hook (what changed this month, why care now).
    - **TL;DR** — 3–5 bullets, the takeaways someone could repeat at dinner.
    - **Sections by theme** (not by video). Each: a bolded claim, a plain-language
@@ -128,7 +131,7 @@ Split the args into channels and a topic:
 
 4. **Render + open.**
    ```
-   python3 scripts/yt_brief.py render /tmp/last30daysYT/report.html
+   python3 scripts/yt_brief.py render /tmp/timestamped/report.html
    ```
    Writes a sibling `report.pdf` and opens the HTML. Tell the user both paths.
 
@@ -152,7 +155,7 @@ Split the args into channels and a topic:
    non-YouTube link, uncertainty appears in the body (not only at the end), and
    there is ≥1 actionable table. Verify mechanically:
    ```
-   python3 scripts/eval_depth.py /tmp/last30daysYT/report.html
+   python3 scripts/eval_depth.py /tmp/timestamped/report.html
    ```
    It must exit 0 (all mechanical checks pass). D6 (novelty — does a
    topic-follower learn ≥3 new things?) is your own judgement, not scriptable.

@@ -1,4 +1,4 @@
-# last30daysYT — channels you follow.
+# Timestamped — channels you follow.
 # One YouTube channel /videos URL per line. Lines starting with # are ignored.
 # Find a channel's URL: open the channel, click "Videos", copy the address bar.
 #

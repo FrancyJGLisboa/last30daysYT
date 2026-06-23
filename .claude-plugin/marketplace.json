@@ -1,16 +1,16 @@
 {
-  "name": "last30daysYT",
+  "name": "timestamped",
   "owner": {
     "name": "Francy Lisboa Charuto",
     "url": "https://github.com/FrancyJGLisboa"
   },
   "metadata": {
-    "description": "Marketplace hosting the last30daysYT YouTube newsletter-generator skill."
+    "description": "Marketplace hosting Timestamped, the topic-first YouTube newsletter generator."
   },
   "plugins": [
     {
-      "name": "last30daysYT",
-      "description": "Topic-first YouTube newsletter generator: engagement-ranks the best videos on a topic from the last 30 days, transcribes them via yt2md, and writes a skimmable, educational newsletter (Markdown + HTML with a chart + PDF). Optionally follows a standing channel list. Any language.",
+      "name": "timestamped",
+      "description": "Timestamped — topic-first YouTube newsletter generator: velocity-ranks the best videos on a topic from the last 30 days, transcribes them via yt2md, and writes a newsletter where every claim is cited to the second and the big claims are corroborated (Markdown + HTML with a chart + PDF). Optionally follows a standing channel list. Any language.",
       "version": "0.1.0",
       "author": {
         "name": "Francy Lisboa Charuto",
