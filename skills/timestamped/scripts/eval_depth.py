@@ -24,6 +24,13 @@ H3 = re.compile(r"<h3\b", re.I)
 TABLE_ROWS = re.compile(r"<tr\b", re.I)
 HREF = re.compile(r'href="([^"]+)"', re.I)
 
+LI_MAX = 120   # a TL;DR bullet over this many visible chars isn't a one-liner
+P_MAX = 420    # a body paragraph over this is a wall of text
+
+
+def _strip(s: str) -> str:
+    return re.sub(r"<[^>]+>", "", s).strip()
+
 
 def check(html: str, scripts_dir: Path) -> list[tuple[str, bool, str]]:
     body = html
@@ -51,12 +58,29 @@ def check(html: str, scripts_dir: Path) -> list[tuple[str, bool, str]]:
            and "jsdelivr" not in h and "cdn." not in h]
     d5 = len(ext) >= 1
 
+    # Scannability (made for short attention spans)
+    hero_i, meta_i = html.find('class="hero-take"'), html.find('class="meta"')
+    s1 = hero_i != -1 and (meta_i == -1 or hero_i < meta_i)
+
+    tldr_m = re.search(r'<div class="tldr".*?</div>', html, re.S)
+    li_lens = [len(_strip(li)) for li in
+               re.findall(r"<li\b[^>]*>(.*?)</li>", tldr_m.group(0), re.S)] if tldr_m else []
+    longest_li = max(li_lens) if li_lens else 0
+    s2 = bool(li_lens) and longest_li <= LI_MAX
+
+    p_lens = [len(_strip(p)) for p in re.findall(r"<p\b[^>]*>(.*?)</p>", html, re.S)]
+    longest_p = max(p_lens) if p_lens else 0
+    s3 = longest_p <= P_MAX
+
     return [
         ("D1 inline confidence on every claim", d1, f"{n_conf} markers / {n_h3} h3-claims"),
         ("D2 actionable table", d2, f"{len(TABLE_ROWS.findall(body))} table rows"),
         ("D3 velocity ranking (selfcheck)", d3, selfcheck.stdout.strip() or selfcheck.stderr.strip()),
         ("D4 uncertainty inline, not only at end", d4, "marker before 'on the radar'" if d4 else "no inline marker before tail"),
         ("D5 >=1 corroborating external link", d5, f"{len(ext)} external link(s)"),
+        ("S1 hero takeaway before meta (5-sec test)", s1, "hero-take precedes meta" if s1 else "missing / after meta"),
+        ("S2 TL;DR bullets one line (<=120ch)", s2, f"longest bullet {longest_li} chars"),
+        ("S3 no wall-of-text paragraph (<=420ch)", s3, f"longest paragraph {longest_p} chars"),
     ]
 
 
