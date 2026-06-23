@@ -1,6 +1,8 @@
 __pycache__/
 *.pyc
 .DS_Store
+# personal local Claude Code settings (permissions, etc.)
+.claude/settings.local.json
 # run outputs (transcripts, digests, reports, PDFs)
 /out/
 *.pdf

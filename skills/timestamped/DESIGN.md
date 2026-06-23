@@ -94,3 +94,25 @@ If the version bumps, recompute the hash.
 - more than one accent color · gradients · drop shadows · emoji
 - system-default sans body (serif body is the register)
 - font sizes off the scale in §4
+- **em-dash overuse** — keep em-dashes sparse; in long passages prefer commas,
+  colons, periods, or parentheses. A pile of em-dashes is an AI-cadence tell.
+
+## 10. Automated enforcement
+
+Two deterministic gates run on every generated newsletter (the verify step):
+
+- **Content depth** — `scripts/eval_depth.py report.html` (the D1–D6 checks).
+- **Design slop** — `scripts/design_eval.sh report.html`, which runs
+  [Impeccable](https://impeccable.style)'s no-LLM 44-rule detector
+  (`npx impeccable detect`). Exit 0 = clean.
+
+The detector is tuned for short React/SaaS UIs, so `.impeccable/config.json`
+suppresses four rules that fight this product's deliberate, long-form editorial
+identity (each is a considered decision, not silencing a real defect):
+
+| Suppressed rule | Why |
+|---|---|
+| `hero-eyebrow-chip` | The masthead kicker is an intentional newspaper kicker (§5) |
+| `numbered-section-markers` | False positive: the minute digits of `[MM:SS]` pills (§2) |
+| `all-caps-body` | Uppercase is confined to labels/headings — kicker, h2, chips (§4) |
+| `em-dash-overuse` | Threshold is for short SaaS copy; this is long-form editorial (guarded above) |
