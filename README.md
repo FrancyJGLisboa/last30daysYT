@@ -2,6 +2,13 @@
 
 > *the last 30 days of any topic on YouTube — in depth, cited to the second*
 
+<p align="center">
+  <a href="examples/ai-local-models-topic.html">
+    <img src="examples/timestamped-preview.png" width="620"
+         alt="A Timestamped brief: punchy headline, a 30-second TL;DR of one-line takeaways each with a timestamp link and a confirmed/single-source/overstated tag, and an engagement chart.">
+  </a>
+</p>
+
 A topic-first **YouTube newsletter generator** for Claude Code. Name a topic and
 it velocity-ranks the best videos from the last 30 days, transcribes them, and
 writes a brief you'll actually finish — where **every claim is cited to the exact
