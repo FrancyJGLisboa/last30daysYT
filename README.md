@@ -26,7 +26,7 @@ platform's published format.
 ### Claude Code
 
 ```
-/plugin marketplace add FrancyJGLisboa/last30daysYT
+/plugin marketplace add FrancyJGLisboa/timestamped
 /plugin install timestamped@timestamped
 ```
 Restart, then run `/timestamped <topic>` (e.g. `/timestamped AI local models`,
@@ -35,21 +35,21 @@ Restart, then run `/timestamped <topic>` (e.g. `/timestamped AI local models`,
 ### GitHub Copilot CLI
 
 ```
-copilot plugin marketplace add FrancyJGLisboa/last30daysYT
+copilot plugin marketplace add FrancyJGLisboa/timestamped
 copilot plugin install timestamped@timestamped
 ```
 
 ### Codex
 
 ```
-npx skills add FrancyJGLisboa/last30daysYT -g
+npx skills add FrancyJGLisboa/timestamped -g
 ```
 (or any [Agent Skills](https://agentskills.io) host)
 
 ### Pi agent harness
 
 ```
-pi install git:github.com/FrancyJGLisboa/last30daysYT
+pi install git:github.com/FrancyJGLisboa/timestamped
 ```
 
 ## How it works
